@@ -4,7 +4,27 @@
     <title>JS Intro</title>
 </head>
     <body>
+        <label>Operand 1</label>
+        <input type="number" name="operand1"/>
         
+        <label>Operand 2</label>
+        <input type="number" name="operand2"/>
+        
+        <select size="1" name="operation-type">
+            <option selected value="sum">Sum</option>
+            <option value="sub">Sub</option>
+            <option value="mul">Mul</option>
+            <option value="div">Div</option>
+        </select>
+        
+        <label>Apply cache</label>
+        <input type="checkbox" name="is-cache"/>
+        
+        <button name="btn-equals">=</button>
+        
+        <input type="number" name="result" disabled/>
+        <label name="cache-status">Cache is off</label>
+
         <script src="Scripts/module.js"></script>
         <script src="Scripts/index.js"></script>
     </body>

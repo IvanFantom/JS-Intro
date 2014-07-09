@@ -43,17 +43,20 @@ CalculatorNS.Calculator = function () {
     function registerFunc(func, cacheSettings) {
         
     };
-    function applyCaching(func) {
-        switch (func.name) {
+    function applyCaching(funcName) {
+        switch (funcName) {
             case 'sum':
-                api.sum = memoize(func);
+                api.sum = memoize(sum);
                 break;
             case 'sub':
-                api.sub = memoize(func);
+                api.sub = memoize(sub);
+                break;
             case 'mul':
-                api.mul = memoize(func);
+                api.mul = memoize(mul);
+                break;
             case 'div':
-                api.div = memoize(func);
+                api.div = memoize(div);
+                break;
             default:
         }
     };
@@ -64,10 +67,13 @@ CalculatorNS.Calculator = function () {
                 break;
             case 'sub':
                 api.sub = sub;
+                break;
             case 'mul':
                 api.mul = mul;
+                break;
             case 'div':
                 api.div = div;
+                break;
             default:
         }
     };
