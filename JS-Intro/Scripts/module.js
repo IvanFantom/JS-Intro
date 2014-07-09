@@ -25,38 +25,75 @@ CalculatorNS.createNS = function (namespace) {
 CalculatorNS.createNS("CalculatorNS.Calculator");
 
 CalculatorNS.Calculator = function () {
+    var cache = {};
+    var tempSum = {};
 
-    var sum = function(op1, op2) {
+    function memoize(func) {
+        var slice = Array.prototype.slice;
+
+        return function() {
+            var args = slice.call(arguments);
+
+            if (args in cache)
+                return cache[args];
+            else
+                return (cache[args] = func.apply(this, args));
+        };
+    };
+    function registerFunc(func, cacheSettings) {
+        
+    };
+    function applyCaching(func) {
+        switch (func.name) {
+            case 'sum':
+                api.sum = memoize(func);
+                break;
+            case 'sub':
+                api.sub = memoize(func);
+            case 'mul':
+                api.mul = memoize(func);
+            case 'div':
+                api.div = memoize(func);
+            default:
+        }
+    };
+    function cancelCaching(funcName) {
+        switch (funcName) {
+            case 'sum':
+                api.sum = sum;
+                break;
+            case 'sub':
+                api.sub = sub;
+            case 'mul':
+                api.mul = mul;
+            case 'div':
+                api.div = div;
+            default:
+        }
+    };
+
+    function sum (op1, op2) {
         return op1 + op2;
     };
-    var sub = function(op1, op2) {
+    function sub(op1, op2) {
         return op1 - op2;
     };
-    var mul = function(op1, op2) {
+    function mul(op1, op2) {
         return op1 * op2;
     };
-    var div = function(op1, op2) {
+    function div(op1, op2) {
         return op1 / op2;
     };
-    
-    return {
+
+    var api = {
         sum: sum,
         sub: sub,
         mul: mul,
         div: div,
-    };
-};
-
-CalculatorNS.createNS('CalculatorNS.FuncRegister');
-
-CalculatorNS.FuncRegister = function () {
-    var funcArray = [];
-
-    var registerFunc = function(func, cacheSettings) {
-        
+        applyCaching: applyCaching,
+        cancelCaching: cancelCaching,
+        registerFunc: registerFunc,
     };
 
-    return {
-        registerFunc: registerFunc
-    };
+    return api;
 };
