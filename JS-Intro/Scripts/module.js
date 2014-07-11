@@ -26,7 +26,21 @@ CalculatorNS.createNS("CalculatorNS.Calculator");
 
 CalculatorNS.Calculator = function () {
     var cache = {};
-    var tempSum = {};
+    var api = {};
+    var funcArray = [];
+
+    function initialize() {
+        funcArray.push(sum, sub, mul, div);
+
+        api = {
+            sum: sum,
+            sub: sub,
+            mul: mul,
+            div: div,
+            toggleCaching: toggleCaching,
+            registerFunc: registerFunc,
+        };
+    };
 
     function memoize(func) {
         var slice = Array.prototype.slice;
@@ -43,42 +57,27 @@ CalculatorNS.Calculator = function () {
     function registerFunc(func, cacheSettings) {
         
     };
-    function applyCaching(funcName) {
-        switch (funcName) {
-            case 'sum':
-                api.sum = memoize(sum);
-                break;
-            case 'sub':
-                api.sub = memoize(sub);
-                break;
-            case 'mul':
-                api.mul = memoize(mul);
-                break;
-            case 'div':
-                api.div = memoize(div);
-                break;
-            default:
+    function toggleCaching(funcName, isCaching) {
+        if (funcName === '' || funcName === undefined) {
+            throw new TypeError('argument funcName is invalid');
         }
-    };
-    function cancelCaching(funcName) {
-        switch (funcName) {
-            case 'sum':
-                api.sum = sum;
+        isCaching = typeof isCaching !== 'boolean' ? true : isCaching;
+
+        for (var i = 0; i < funcArray.length; i++) {
+            if (funcArray[i].name === funcName) {
+                var fn = funcArray[i];
                 break;
-            case 'sub':
-                api.sub = sub;
-                break;
-            case 'mul':
-                api.mul = mul;
-                break;
-            case 'div':
-                api.div = div;
-                break;
-            default:
+            }
         }
+
+        if (fn === undefined) {
+            throw new TypeError('there is no such function: ' + funcName);
+        }
+
+        isCaching ? api[funcName] = memoize(fn) : api[funcName] = fn;;
     };
 
-    function sum (op1, op2) {
+    function sum(op1, op2) {
         return op1 + op2;
     };
     function sub(op1, op2) {
@@ -91,15 +90,7 @@ CalculatorNS.Calculator = function () {
         return op1 / op2;
     };
 
-    var api = {
-        sum: sum,
-        sub: sub,
-        mul: mul,
-        div: div,
-        applyCaching: applyCaching,
-        cancelCaching: cancelCaching,
-        registerFunc: registerFunc,
-    };
+    initialize();
 
     return api;
 };

@@ -39,11 +39,11 @@
         var status = '';
 
         if (isCache.checked) {
-            calc.applyCaching(funcName);
+            calc.toggleCaching(funcName);
             status = 'Cache is on';
         }
         else {
-            calc.cancelCaching(funcName);
+            calc.toggleCaching(funcName, false);
             status = 'Cache is off';
         }
         
@@ -59,7 +59,7 @@
     //r = calc.sum(3, 4);
     //console.log(r);
 
-    //calc.applyCaching(calc.sum);
+    //calc.toggleCaching('sum', true);
 
     //r = calc.sum(3, 4);
     //console.log(r);
@@ -67,7 +67,7 @@
     //r = calc.sum(3, 4);
     //console.log(r);
 
-    //calc.cancelCaching('sum');
+    //calc.toggleCaching('sum', false);
 
     //r = calc.sum(3, 5);
     //console.log(r);
