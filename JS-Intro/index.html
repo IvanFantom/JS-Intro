@@ -2,30 +2,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>JS Intro</title>
+    <link href="css/index.css" rel="stylesheet" />
 </head>
     <body>
-        <label>Operand 1</label>
-        <input type="number" name="operand1"/>
+        <div class="calc-area">
+            <div class="area-group">
+                <div class="operand-area">
+                    <div class="input-group">
+                        <label>Operand 1</label>
+                        <input type="number" name="operand"/>
+                        <!--<button class="btn">-</button>-->
+                    </div>
+                    <div class="input-group">
+                        <label>Operand 2</label>
+                        <input type="number" name="operand"/>
+                        <!--<button class="btn">-</button>-->
+                    </div>
+                    <!--<button class="btn">+</button>-->
+                </div>
+
+                <div class="function-implementation">
+                    <textarea rows="10" cols="50" name="newFunc" placeholder="function func(a, b) {...};"></textarea>
+                    <button name="addFuncBtn">Add function</button>
+                </div>
+            </div>
         
-        <label>Operand 2</label>
-        <input type="number" name="operand2"/>
+            <div class="area-group">
+                <div class="execution-area">
+                    <select size="1" name="operationType">
+                        <option selected value="sum">Sum</option>
+                        <option value="sub">Sub</option>
+                        <option value="mul">Mul</option>
+                        <option value="div">Div</option>
+                    </select>
+
+                    <label>Apply cache</label>
+                    <input type="checkbox" name="isCache"/>
         
-        <select size="1" name="operation-type">
-            <option selected value="sum">Sum</option>
-            <option value="sub">Sub</option>
-            <option value="mul">Mul</option>
-            <option value="div">Div</option>
-        </select>
+                    <button class="btn" name="equalsBtn">=</button>
         
-        <label>Apply cache</label>
-        <input type="checkbox" name="is-cache"/>
-        
-        <button name="btn-equals">=</button>
-        
-        <input type="number" name="result" disabled/>
-        <label name="cache-status">Cache is off</label>
+                    <input type="number" name="result" disabled/>
+
+                    <label name="cacheStatus">Cache is off</label>
+                </div>
+            </div>
+        </div>
 
         <script src="Scripts/module.js"></script>
-        <script src="Scripts/index.js"></script>
+            <script src="Scripts/index.js"></script>
     </body>
 </html>

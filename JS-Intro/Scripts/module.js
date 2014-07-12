@@ -54,12 +54,22 @@ CalculatorNS.Calculator = function () {
                 return (cache[args] = func.apply(this, args));
         };
     };
-    function registerFunc(func, cacheSettings) {
-        
+    function registerFunc(func) {
+        if (typeof func !== 'function') {
+            throw new TypeError('argument "func" is invalid');
+        }
+
+        if (!api[func.name]) {
+            api[func.name] = func;
+            funcArray.push(func);
+            return true;
+        }
+
+        return false;
     };
     function toggleCaching(funcName, isCaching) {
         if (funcName === '' || funcName === undefined) {
-            throw new TypeError('argument funcName is invalid');
+            throw new TypeError('argument "funcName" is invalid');
         }
         isCaching = typeof isCaching !== 'boolean' ? true : isCaching;
 
