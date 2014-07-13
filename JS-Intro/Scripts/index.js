@@ -1,79 +1,41 @@
 (function () {
-    var operands = document.getElementsByName('operand');
-    var newFunc = document.getElementsByName('newFunc')[0];
-    var addFuncBtn = document.getElementsByName('addFuncBtn')[0];
-    var operationType = document.getElementsByName('operationType')[0];
-    var isCache = document.getElementsByName('isCache')[0];
-    var equalsBtn = document.getElementsByName('equalsBtn')[0];
-    var resultInput = document.getElementsByName('result')[0];
-    var cacheStatus = document.getElementsByName('cacheStatus')[0];
-
-    var calc = new CalculatorNS.Calculator();
-
-    function sumSquare(a, b) {
-        return a * a + 2 * a * b + b * b;
+    var cacheSettings = {
+        size: 3,
     };
+    var calc = new CalculatorNS.Calculator(cacheSettings);
 
-    function addFuncBtnClickHandler() {
-        var text = newFunc.value;
+    var r = calc.sum(3, 4);
+    console.log(r);
 
-        if (calc.registerFunc(sumSquare)) {
-            var option = document.createElement('option');
-            var funcName = sumSquare.name;
+    r = calc.sum(9, 8);
+    console.log(r);
 
-            option.setAttribute('value', funcName);
-            option.innerHTML = funcName;
-            operationType.appendChild(option);
-        }
-    };
-    function equalsClickHandler() {
-        var args = [];
+    calc.toggleCaching('sum');
+    calc.toggleCaching('mul');
+    calc.toggleCaching('div');
 
-        for (var i = 0; i < operands.length; i++) {
-            args.push(+operands[i].value);
-        }
+    r = calc.sum(1, 25);
+    console.log(r);
 
-        var funcName = operationType.options[operationType.selectedIndex].value;
-        var result = calc[funcName].apply(null, args);
+    r = calc.sum(2, 55);
+    console.log(r);
 
-        resultInput.value = result;
-    };
-    function isCacheChangeHandler() {
-        var funcName = operationType.options[operationType.selectedIndex].value;
-        var status = '';
+    r = calc.sum(3, 55);
+    console.log(r);
 
-        if (isCache.checked) {
-            calc.toggleCaching(funcName);
-            status = 'Cache is on';
-        }
-        else {
-            calc.toggleCaching(funcName, false);
-            status = 'Cache is off';
-        }
-        
-        cacheStatus.innerHTML = status;
-    };
+    r = calc.sum(4, 55);
+    console.log(r);
 
-    addFuncBtn.addEventListener('click', addFuncBtnClickHandler);
-    isCache.addEventListener('change', isCacheChangeHandler);
-    equalsBtn.addEventListener('click', equalsClickHandler);
-    
-    //var r = calc.sum(3, 4);
-    //console.log(r);
+    r = calc.sum(5, 55);
+    console.log(r);
 
-    //r = calc.sum(3, 4);
-    //console.log(r);
+    r = calc.sum(6, 55);
+    console.log(r);
 
-    //calc.toggleCaching('sum');
+    calc.toggleCaching('sum', false);
+    calc.toggleCaching('mul', false);
+    calc.toggleCaching('div', false);
 
-    //r = calc.sum(3, 4);
-    //console.log(r);
-
-    //r = calc.sum(3, 4);
-    //console.log(r);
-
-    //calc.toggleCaching('sum', false);
-
-    //r = calc.sum(3, 5);
-    //console.log(r);
+    r = calc.sum(3, 5);
+    console.log(r);
 })();

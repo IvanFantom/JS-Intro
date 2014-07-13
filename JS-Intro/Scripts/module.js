@@ -24,12 +24,13 @@ CalculatorNS.createNS = function (namespace) {
 
 CalculatorNS.createNS("CalculatorNS.Calculator");
 
-CalculatorNS.Calculator = function () {
-    var cache = {};
+CalculatorNS.Calculator = function (cacheSettings) {
     var api = {};
+    var cache = {};
     var funcArray = [];
 
     function initialize() {
+        cache = new CalculatorNS.Calculator.Cache(cacheSettings);
         funcArray.push(sum, sub, mul, div);
 
         api = {
@@ -47,11 +48,16 @@ CalculatorNS.Calculator = function () {
 
         return function() {
             var args = slice.call(arguments);
+            var tag = args.slice(0);
 
-            if (args in cache)
-                return cache[args];
-            else
-                return (cache[args] = func.apply(this, args));
+            tag.unshift(func.name);
+
+            if (cache.contains(tag))
+                return cache.getValue(tag);
+            else {
+                cache.add(tag, func.apply(this, args));
+                return cache.getValue(tag);
+            }
         };
     };
     function registerFunc(func) {
@@ -84,7 +90,7 @@ CalculatorNS.Calculator = function () {
             throw new TypeError('there is no such function: ' + funcName);
         }
 
-        isCaching ? api[funcName] = memoize(fn) : api[funcName] = fn;;
+        api[funcName] = isCaching ? memoize(fn) : fn;
     };
 
     function sum(op1, op2) {
@@ -98,6 +104,88 @@ CalculatorNS.Calculator = function () {
     };
     function div(op1, op2) {
         return op1 / op2;
+    };
+
+    initialize();
+
+    return api;
+};
+
+CalculatorNS.createNS("CalculatorNS.Calculator.Cache");
+
+CalculatorNS.Calculator.Cache = function(options) {
+    var api = {};
+    var cache = [];
+    var settings = {};
+    var defaultSettings = {
+        size: Number.MAX_VALUE
+    };
+    var oldest = 0;
+
+    function initialize() {
+        settings = options || clone(defaultSettings);
+
+        api = {
+            add: add,
+            getValue: getValue,
+            contains: contains,
+            reset: reset,
+            options: settings
+        };
+    };
+
+    function add(tag, value) {
+        var row = {};
+        row[tag] = value;
+
+        if (cache.length < settings.size) {
+            cache.push(row);
+        }
+        else {
+            cache[oldest++] = row;
+            oldest = oldest === settings.size ? 0 : oldest;
+        }
+    };
+    function getValue(tag) {
+        for (var i = 0; i < cache.length; i++) {
+            if (tag in cache[i]) {
+                return cache[i][tag];
+            }
+        }
+    };
+    function contains(tag) {
+        for (var i = 0; i < cache.length; i++) {
+            if (tag in cache[i]) {
+                return true;
+            }
+        }
+        return false;
+    };
+    function reset() {
+        cache = [];
+        oldest = 0;
+        settings = clone(defaultSettings);
+    }
+
+    function clone(o) {
+        if(!o || 'object' !== typeof o)  {
+            return o;
+        }
+
+        var c = 'function' === typeof o.pop ? [] : {};
+        var p, v;
+        for(p in o) {
+            if(o.hasOwnProperty(p)) {
+                v = o[p];
+                if(v && 'object' === typeof v) {
+                    c[p] = clone(v);
+                }
+                else {
+                    c[p] = v;
+                }
+            }
+        }
+        return c;
     };
 
     initialize();
