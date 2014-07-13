@@ -40,6 +40,7 @@ CalculatorNS.Calculator = function (cacheSettings) {
             div: div,
             toggleCaching: toggleCaching,
             registerFunc: registerFunc,
+            resetCache: resetCache
         };
     };
 
@@ -52,9 +53,12 @@ CalculatorNS.Calculator = function (cacheSettings) {
 
             tag.unshift(func.name);
 
-            if (cache.contains(tag))
+            if (cache.contains(tag)) {
+                console.log('cache hit');
                 return cache.getValue(tag);
+            }
             else {
+                console.log('cache miss, adding new row in cache');
                 cache.add(tag, func.apply(this, args));
                 return cache.getValue(tag);
             }
@@ -92,6 +96,9 @@ CalculatorNS.Calculator = function (cacheSettings) {
 
         api[funcName] = isCaching ? memoize(fn) : fn;
     };
+    function resetCache() {
+        cache.reset();
+    }
 
     function sum(op1, op2) {
         return op1 + op2;
@@ -144,6 +151,7 @@ CalculatorNS.Calculator.Cache = function(options) {
         else {
             cache[oldest++] = row;
             oldest = oldest === settings.size ? 0 : oldest;
+            console.log('overwriting cache row');
         }
     };
     function getValue(tag) {
@@ -164,7 +172,7 @@ CalculatorNS.Calculator.Cache = function(options) {
     function reset() {
         cache = [];
         oldest = 0;
-        settings = clone(defaultSettings);
+        options = settings = clone(defaultSettings);
     }
 
     function clone(o) {
