@@ -78,19 +78,20 @@ CalculatorNS.Calculator = function (cacheSettings) {
         return false;
     };
     function toggleCaching(funcName, isCaching) {
-        if (funcName === '' || funcName === undefined) {
+        if (!funcName) {
             throw new TypeError('argument "funcName" is invalid');
         }
         isCaching = typeof isCaching !== 'boolean' ? true : isCaching;
 
+        var fn = null;
         for (var i = 0; i < funcArray.length; i++) {
             if (funcArray[i].name === funcName) {
-                var fn = funcArray[i];
+                fn = funcArray[i];
                 break;
             }
         }
 
-        if (fn === undefined) {
+        if (fn) {
             throw new TypeError('there is no such function: ' + funcName);
         }
 
