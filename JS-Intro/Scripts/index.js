@@ -1,8 +1,10 @@
 (function () {
+    'use strict';
+
     var cacheSettings = {
         size: 3,
     };
-    var calc = new CalculatorNS.Calculator(cacheSettings);
+    var calc = new Calculator.Calculator(cacheSettings);
 
     function sumSquare(a, b) {
         return a * a + 2 * a * b + b * b;
@@ -18,8 +20,8 @@
         }
     }
 
-    calc.registerFunc(sumSquare);
-    calc.registerFunc(factorial);
+    calc.registerFunction(sumSquare);
+    calc.registerFunction(factorial);
 
     var r = calc.mul(3, 4);
     console.log(r);
